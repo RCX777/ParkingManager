@@ -1,0 +1,11 @@
+services:
+  api:
+    name: api
+    build:
+      context: ..
+      dockerfile: docker/api.Dockerfile
+    volumes:
+      - ../api:/api
+    ports:
+      - 80:5283
+
