@@ -1,3 +1,7 @@
-# dotnet api
+# api
 api/bin/
 api/obj/
+
+# db
+.db_data/
+

@@ -6,6 +6,8 @@ endif
 
 COMPOSE_FILE = $(PWD)/docker/compose.yml
 
+all: run
+
 run:
 	$(CONTAINER_ENGINE) compose -f $(COMPOSE_FILE) up -d --build
 

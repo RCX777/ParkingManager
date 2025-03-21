@@ -4,8 +4,36 @@ services:
     build:
       context: ..
       dockerfile: docker/api.Dockerfile
-    volumes:
-      - ../api:/api
     ports:
       - 80:5283
+    networks:
+      - api
+    volumes:
+      - ../api:/api
 
+  db:
+    name: db
+    build:
+      context: ..
+      dockerfile: docker/db.Dockerfile
+    environment:
+      POSTGRES_PASSWORD: example
+    networks:
+      - api
+      - db-admin
+    volumes:
+      - ../.db_data:/var/lib/postgresql/data
+
+  db-admin:
+    name: db-admin
+    image: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - db-admin
+
+networks:
+  api:
+    driver: bridge
+  db-admin:
+    driver: bridge
