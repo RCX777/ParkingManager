@@ -1,39 +1,55 @@
 services:
-  api:
-    name: api
+  backend:
+    container_name: backend
     build:
       context: ..
       dockerfile: docker/api.Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
     ports:
-      - 80:5283
+      - 80:5000
     networks:
-      - api
+      - backend
     volumes:
-      - ../api:/api
+      - ../backend:/app
 
   db:
-    name: db
+    container_name: db
     build:
       context: ..
       dockerfile: docker/db.Dockerfile
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_DB: db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
     networks:
-      - api
+      - backend
       - db-admin
     volumes:
       - ../.db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d db"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   db-admin:
-    name: db-admin
+    container_name: db-admin
     image: adminer
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
     ports:
       - 8080:8080
     networks:
       - db-admin
 
 networks:
-  api:
+  backend:
     driver: bridge
   db-admin:
     driver: bridge

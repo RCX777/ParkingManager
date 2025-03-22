@@ -1,4 +1,11 @@
-FROM mcr.microsoft.com/dotnet/sdk:9.0
+FROM mcr.microsoft.com/dotnet/sdk:8.0
 
-CMD [ "dotnet", "run", "--project", "/api" ]
+WORKDIR /app
+
+RUN dotnet tool install --global dotnet-ef --version '8.*'
+
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+
+CMD [ "bash", "-c", "dotnet ef migrations add InitialCreate --context WebAppDatabaseContext --project ParkingManager.Infrastructure --startup-project ParkingManager.Api; dotnet run --project ParkingManager.Api" ]
 
