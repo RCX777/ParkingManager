@@ -90,7 +90,7 @@ public class UserController(IUserService userService) : AuthorizedController(use
         var currentUser = await GetCurrentUser();
 
         return currentUser.Result != null ?
-            FromServiceResponse(await UserService.DeleteUser(id)) :
+            FromServiceResponse(await UserService.DeleteUser(id, currentUser.Result)) :
             ErrorMessageResult(currentUser.Error);
     }
 }

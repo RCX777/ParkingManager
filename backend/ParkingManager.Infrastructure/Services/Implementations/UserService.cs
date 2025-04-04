@@ -116,7 +116,11 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
 
     public async Task<ServiceResponse> DeleteUser(Guid id, UserDTO? requestingUser = null, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin && requestingUser.Id != id) // Verify who can add the user, you can change this however you se fit.
+        if (requestingUser == null)
+        {
+            return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Must be logged in to delete a user!", ErrorCodes.CannotDelete));
+        }
+        if (requestingUser.Role != UserRoleEnum.Admin && requestingUser.Id != id) // Verify who can add the user, you can change this however you se fit.
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin or the own user can delete the user!", ErrorCodes.CannotDelete));
         }
