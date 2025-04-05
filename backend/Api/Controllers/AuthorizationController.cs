@@ -5,7 +5,7 @@ using ParkingManager.Core.Responses;
 using ParkingManager.Infrastructure.Authorization;
 using ParkingManager.Infrastructure.Services.Interfaces;
 
-namespace ParkingManager.Backend.Controllers;
+namespace ParkingManager.Api.Controllers;
 
 /// <summary>
 /// This is a controller to respond to authentication requests.

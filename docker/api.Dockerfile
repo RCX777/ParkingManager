@@ -7,5 +7,5 @@ RUN dotnet tool install --global dotnet-ef --version '8.*'
 ENV PATH="$PATH:/root/.dotnet/tools"
 
 
-CMD [ "bash", "-c", "dotnet ef migrations add InitialCreate --context WebAppDatabaseContext --project ParkingManager.Infrastructure --startup-project ParkingManager.Api; dotnet run --project ParkingManager.Api" ]
+CMD [ "bash", "-c", "dotnet ef migrations add InitialCreate --context WebAppDatabaseContext --project . --startup-project .; dotnet run --project ." ]
 

@@ -8,7 +8,7 @@ using ParkingManager.Infrastructure.Extensions;
 using ParkingManager.Infrastructure.Services.Interfaces;
 using System.Net.Mime;
 
-namespace ParkingManager.Backend.Controllers;
+namespace ParkingManager.Api.Controllers;
 
 /// <summary>
 /// This is a controller example to show who to work with files and form data.

@@ -6,7 +6,7 @@ using ParkingManager.Core.Responses;
 using ParkingManager.Infrastructure.Authorization;
 using ParkingManager.Infrastructure.Services.Interfaces;
 
-namespace ParkingManager.Backend.Controllers;
+namespace ParkingManager.Api.Controllers;
 
 /// <summary>
 /// This is a controller example for CRUD operations on users.
