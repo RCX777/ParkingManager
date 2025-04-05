@@ -7,20 +7,13 @@ namespace ParkingManager.Core.Errors;
 /// This is a simple class to transmit the error information to the client.
 /// It includes the message, custom error code to identify te specific error and the HTTP status code to be set on the HTTP response.
 /// </summary>
-public class ErrorMessage
+public class ErrorMessage(HttpStatusCode status, string message, ErrorCodes code = ErrorCodes.Unknown)
 {
-    public string Message { get; }
-    public ErrorCodes Code { get; }
+    public string Message { get; } = message;
+    public ErrorCodes Code { get; } = code;
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public HttpStatusCode Status { get; }
-
-    public ErrorMessage(HttpStatusCode status, string message, ErrorCodes code = ErrorCodes.Unknown)
-    {
-        Message = message;
-        Status = status;
-        Code = code;
-    }
+    public HttpStatusCode Status { get; } = status;
 
     public static ErrorMessage FromException(ServerException exception) => new(exception.Status, exception.Message);
 }

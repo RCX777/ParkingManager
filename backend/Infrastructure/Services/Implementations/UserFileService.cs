@@ -53,8 +53,8 @@ public class UserFileService(IRepository<WebAppDatabaseContext> repository, IFil
     {
         var userFile = await repository.GetAsync<UserFile>(id, cancellationToken); // First get the file entity from the database to find the location on the filesystem.
 
-        return userFile != null ? 
-            fileRepository.GetFile(Path.Join(GetFileDirectory(userFile.UserId), userFile.Path), userFile.Name) : 
+        return userFile != null ?
+            fileRepository.GetFile(Path.Join(GetFileDirectory(userFile.UserId), userFile.Path), userFile.Name) :
             ServiceResponse.FromError<FileDTO>(new(HttpStatusCode.NotFound, "File entry not found!", ErrorCodes.EntityNotFound));
     }
 }

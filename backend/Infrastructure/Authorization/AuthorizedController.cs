@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
 using ParkingManager.Core.DataTransferObjects;
 using ParkingManager.Core.Handlers;
 using ParkingManager.Core.Responses;

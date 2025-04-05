@@ -4,7 +4,6 @@ using ParkingManager.Core.DataTransferObjects;
 using ParkingManager.Core.Requests;
 using ParkingManager.Core.Responses;
 using ParkingManager.Infrastructure.Authorization;
-using ParkingManager.Infrastructure.Extensions;
 using ParkingManager.Infrastructure.Services.Interfaces;
 using System.Net.Mime;
 
@@ -59,7 +58,7 @@ public class UserFileController(IUserService userService, IUserFileService userF
     [Authorize]
     [HttpGet("{id:guid}")]
     [Produces(MediaTypeNames.Application.Octet, MediaTypeNames.Application.Json)] // Sets the possible response MIME types because on success a binary file is send while on error a error JSON is send.
-    [ProducesResponseType(typeof(FileResult), StatusCodes.Status200OK)] // On success a FileResult should be send. 
+    [ProducesResponseType(typeof(FileResult), StatusCodes.Status200OK)] // On success a FileResult should be send.
     public async Task<ActionResult<RequestResponse>> Download([FromRoute] Guid id)
     {
         var currentUser = await GetCurrentUser();
@@ -71,7 +70,7 @@ public class UserFileController(IUserService userService, IUserFileService userF
 
         var file = await userFileService.GetFileDownload(id);
 
-        return file.Result != null ? 
+        return file.Result != null ?
             File(file.Result.Stream, MediaTypeNames.Application.Octet, file.Result.Name) : // The File method of the controller base returns a response from a stream with the given media type and filename.
             ErrorMessageResult(file.Error);
     }

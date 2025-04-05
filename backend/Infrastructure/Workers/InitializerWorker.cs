@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using ParkingManager.Core.Enums;
+﻿using ParkingManager.Core.Enums;
 using ParkingManager.Infrastructure.Authorization;
 using ParkingManager.Infrastructure.Services.Interfaces;
 

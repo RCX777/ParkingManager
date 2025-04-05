@@ -17,7 +17,7 @@ namespace ParkingManager.Api.Controllers;
 public class UserController(IUserService userService) : AuthorizedController(userService) // Here we use the AuthorizedController as the base class because it derives ControllerBase and also has useful methods to retrieve user information.
 {                                                                                         // Also, you may pass constructor parameters to a base class constructor and call as specific constructor from the base class.
     /// <summary>
-    /// This method implements the Read operation (R from CRUD) on a user. 
+    /// This method implements the Read operation (R from CRUD) on a user.
     /// </summary>
     [Authorize] // You need to use this attribute to protect the route access, it will return a Forbidden status code if the JWT is not present or invalid, and also it will decode the JWT token.
     [HttpGet("{id:guid}")] // This attribute will make the controller respond to a HTTP GET request on the route /api/User/GetById/<some_guid>.
@@ -25,8 +25,8 @@ public class UserController(IUserService userService) : AuthorizedController(use
     {
         var currentUser = await GetCurrentUser();
 
-        return currentUser.Result != null ? 
-            FromServiceResponse(await UserService.GetUser(id)) : 
+        return currentUser.Result != null ?
+            FromServiceResponse(await UserService.GetUser(id)) :
             ErrorMessageResult<UserDTO>(currentUser.Error);
     }
 
@@ -48,7 +48,7 @@ public class UserController(IUserService userService) : AuthorizedController(use
     }
 
     /// <summary>
-    /// This method implements the Create operation (C from CRUD) of a user. 
+    /// This method implements the Create operation (C from CRUD) of a user.
     /// </summary>
     [Authorize]
     [HttpPost] // This attribute will make the controller respond to a HTTP POST request on the route /api/User/Add.
@@ -63,7 +63,7 @@ public class UserController(IUserService userService) : AuthorizedController(use
     }
 
     /// <summary>
-    /// This method implements the Update operation (U from CRUD) on a user. 
+    /// This method implements the Update operation (U from CRUD) on a user.
     /// </summary>
     [Authorize]
     [HttpPut] // This attribute will make the controller respond to a HTTP PUT request on the route /api/User/Update.

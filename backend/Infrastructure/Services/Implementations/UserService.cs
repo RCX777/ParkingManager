@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.ComponentModel.DataAnnotations;
 using ParkingManager.Core.Constants;
 using ParkingManager.Core.DataTransferObjects;
 using ParkingManager.Core.Entities;
@@ -23,8 +24,8 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
     {
         var result = await repository.GetAsync(new UserProjectionSpec(id), cancellationToken); // Get a user using a specification on the repository.
 
-        return result != null ? 
-            ServiceResponse.ForSuccess(result) : 
+        return result != null ?
+            ServiceResponse.ForSuccess(result) :
             ServiceResponse.FromError<UserDTO>(CommonErrors.UserNotFound); // Pack the result or error into a ServiceResponse.
     }
 
@@ -64,7 +65,7 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
         });
     }
 
-    public async Task<ServiceResponse<int>> GetUserCount(CancellationToken cancellationToken = default) => 
+    public async Task<ServiceResponse<int>> GetUserCount(CancellationToken cancellationToken = default) =>
         ServiceResponse.ForSuccess(await repository.GetCountAsync<User>(cancellationToken)); // Get the count of all user entities in the database.
 
     public async Task<ServiceResponse> AddUser(UserAddDTO user, UserDTO? requestingUser, CancellationToken cancellationToken = default)
@@ -79,6 +80,11 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
         if (result != null)
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Conflict, "The user already exists!", ErrorCodes.UserAlreadyExists));
+        }
+
+        if (!new EmailAddressAttribute().IsValid(user.Email)) // Verify if the email is valid.
+        {
+            return ServiceResponse.FromError(new(HttpStatusCode.BadRequest, "The email is not valid!", ErrorCodes.InvalidEmail));
         }
 
         await repository.AddAsync(new User
@@ -101,7 +107,7 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin or the own user can update the user!", ErrorCodes.CannotUpdate));
         }
 
-        var entity = await repository.GetAsync(new UserSpec(user.Id), cancellationToken); 
+        var entity = await repository.GetAsync(new UserSpec(user.Id), cancellationToken);
 
         if (entity != null) // Verify if the user is not found, you cannot update a non-existing entity.
         {

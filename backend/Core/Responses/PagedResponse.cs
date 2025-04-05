@@ -1,7 +1,7 @@
 ﻿namespace ParkingManager.Core.Responses;
 
 /// <summary>
-/// This class encapsulated the response for a pagination request. 
+/// This class encapsulated the response for a pagination request.
 /// </summary>
 public class PagedResponse<T>(int page, int pageSize, int totalCount, List<T> data)
 {
@@ -17,7 +17,7 @@ public class PagedResponse<T>(int page, int pageSize, int totalCount, List<T> da
 
     /// <summary>
     /// TotalCount is the maximum number of entries that can be retrieved form the backend.
-    /// It should be used by the client to determine the total number of pages for a given page size. 
+    /// It should be used by the client to determine the total number of pages for a given page size.
     /// </summary>
     public int TotalCount { get; set; } = totalCount;
 
@@ -30,5 +30,5 @@ public class PagedResponse<T>(int page, int pageSize, int totalCount, List<T> da
 public static class PagedResponseExtension
 {
     public static PagedResponse<TOut> Map<TIn, TOut>(this PagedResponse<TIn> response, Func<TIn, TOut> selector) =>
-        new(response.Page, response.PageSize, response.TotalCount, response.Data.Select(selector).ToList());
+        new(response.Page, response.PageSize, response.TotalCount, [.. response.Data.Select(selector)]);
 }

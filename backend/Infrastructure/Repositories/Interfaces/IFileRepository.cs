@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using ParkingManager.Core.DataTransferObjects;
+﻿using ParkingManager.Core.DataTransferObjects;
 using ParkingManager.Core.Responses;
 
 namespace ParkingManager.Infrastructure.Repositories.Interfaces;

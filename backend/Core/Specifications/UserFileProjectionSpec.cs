@@ -31,7 +31,7 @@ public sealed class UserFileProjectionSpec : Specification<UserFile, UserFileDTO
             UpdatedAt = e.UpdatedAt
         })
         .OrderByDescending(x => x.CreatedAt, orderByCreatedAt);
-    
+
     public UserFileProjectionSpec(string? search) : this(true)
     {
         search = !string.IsNullOrWhiteSpace(search) ? search.Trim() : null;

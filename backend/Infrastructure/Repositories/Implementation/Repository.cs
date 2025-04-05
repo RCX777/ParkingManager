@@ -60,7 +60,7 @@ public sealed class Repository<TDb>(TDb dbContext) : IRepository<TDb> where TDb 
     }
 
     public async Task<List<TOut>> AddRangeAsync<T, TOut>(List<T> entities, ISpecification<T, TOut> spec, CancellationToken cancellationToken = default) where T : BaseEntity =>
-        new SpecificationEvaluator().GetQuery((await AddRangeAsync(entities, cancellationToken)).AsQueryable(), spec).ToList();
+        [.. new SpecificationEvaluator().GetQuery((await AddRangeAsync(entities, cancellationToken)).AsQueryable(), spec)];
 
     public async Task<T> UpdateAsync<T>(T entity, CancellationToken cancellationToken = default) where T : BaseEntity
     {
@@ -88,7 +88,7 @@ public sealed class Repository<TDb>(TDb dbContext) : IRepository<TDb> where TDb 
     }
 
     public async Task<List<TOut>> UpdateRangeAsync<T, TOut>(List<T> entities, ISpecification<T, TOut> spec, CancellationToken cancellationToken = default) where T : BaseEntity =>
-        new SpecificationEvaluator().GetQuery((await UpdateRangeAsync(entities, cancellationToken)).AsQueryable(), spec).ToList();
+        [.. new SpecificationEvaluator().GetQuery((await UpdateRangeAsync(entities, cancellationToken)).AsQueryable(), spec)];
 
     public async Task<int> DeleteAsync<T>(Guid id, CancellationToken cancellationToken = default) where T : BaseEntity
     {

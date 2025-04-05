@@ -8,11 +8,11 @@ namespace ParkingManager.Core.Responses;
 public class RequestResponse<T>
 {
     /// <summary>
-    /// This is the response to the request, if an error occurred this should be null. 
+    /// This is the response to the request, if an error occurred this should be null.
     /// </summary>
     public T? Response { get; private init; }
     /// <summary>
-    /// This is the error message for the error that occurred while responding to the request, if no error occurred this should be null. 
+    /// This is the error message for the error that occurred while responding to the request, if no error occurred this should be null.
     /// </summary>
     public ErrorMessage? ErrorMessage { get; private init; }
 

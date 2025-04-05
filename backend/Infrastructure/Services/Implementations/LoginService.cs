@@ -15,7 +15,7 @@ namespace ParkingManager.Infrastructure.Services.Implementations;
 public class LoginService(IOptions<JwtConfiguration> jwtConfiguration) : ILoginService
 {
     private readonly JwtConfiguration _jwtConfiguration = jwtConfiguration.Value;
-    
+
     public string GetToken(UserDTO user, DateTime issuedAt, TimeSpan expiresIn)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

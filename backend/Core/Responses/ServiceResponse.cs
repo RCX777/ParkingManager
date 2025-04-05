@@ -63,7 +63,7 @@ public static class ServiceResponseExtension
         ServiceResponse.FromError(ex is ServerException serverException
             ? ErrorMessage.FromException(serverException)
             : new ErrorMessage(HttpStatusCode.InternalServerError, "A unexpected error occurred!"));
-    
+
     public static ServiceResponse<T> ToServiceResponseFromException<T>(this Exception ex) =>
         ServiceResponse.FromError<T>(ex is ServerException serverException
             ? ErrorMessage.FromException(serverException)

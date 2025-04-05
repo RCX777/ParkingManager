@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using ParkingManager.Infrastructure.Middlewares;
+﻿using ParkingManager.Infrastructure.Middlewares;
 using Serilog;
 
 namespace ParkingManager.Infrastructure.Extensions;

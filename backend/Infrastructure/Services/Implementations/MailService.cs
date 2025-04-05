@@ -18,7 +18,7 @@ public class MailService(IOptions<MailConfiguration> mailConfiguration) : IMailS
     private readonly MailConfiguration _mailConfiguration = mailConfiguration.Value;
 
 
-    public async Task<ServiceResponse> SendMail(string recipientEmail, string subject, string body, bool isHtmlBody = false, 
+    public async Task<ServiceResponse> SendMail(string recipientEmail, string subject, string body, bool isHtmlBody = false,
         string? senderTitle = null, CancellationToken cancellationToken = default)
     {
         if (!_mailConfiguration.MailEnable) // If you need only to test and not send emails you can set this variable to false, otherwise it will try to send the emails.

@@ -6,62 +6,53 @@ namespace ParkingManager.Core.Errors;
 /// This is an alternative solution to the ServiceResponse class if you rather want to use exceptions.
 /// You may add more exceptions for other HTTP codes as you like.
 /// </summary>
-public class ServerException : Exception
+public class ServerException(
+    HttpStatusCode status,
+    string message,
+    ErrorCodes code = ErrorCodes.Unknown) : Exception(message)
 {
-    public HttpStatusCode Status { get; }
-    public ErrorCodes Code { get; }
-    public ServerException(HttpStatusCode status, string message, ErrorCodes code = ErrorCodes.Unknown) : base(message)
-    {
-        Status = status;
-        Code = code;
-    }
+    public HttpStatusCode Status { get; } = status;
+    public ErrorCodes Code { get; } = code;
 }
 
-public class InternalServerErrorException : ServerException
+public class InternalServerErrorException(
+    string message = "Something went wrong!",
+    ErrorCodes code = ErrorCodes.Unknown) : ServerException(HttpStatusCode.InternalServerError, message, code)
 {
-    public InternalServerErrorException(string message = "Something went wrong!", ErrorCodes code = ErrorCodes.Unknown) : base(HttpStatusCode.InternalServerError, message, code)
-    {
-    }
 }
 
-public class ForbiddenException : ServerException
+public class ForbiddenException(
+    string message,
+    ErrorCodes code = ErrorCodes.Unknown) : ServerException(HttpStatusCode.Forbidden, message, code)
 {
-    public ForbiddenException(string message, ErrorCodes code = ErrorCodes.Unknown) : base(HttpStatusCode.Forbidden, message, code)
-    {
-    }
 }
 
-public class BadRequestException : ServerException
+public class BadRequestException(
+    string message,
+    ErrorCodes code = ErrorCodes.Unknown) : ServerException(HttpStatusCode.BadRequest, message, code)
 {
-    public BadRequestException(string message, ErrorCodes code = ErrorCodes.Unknown) : base(HttpStatusCode.BadRequest, message, code)
-    {
-    }
 }
 
-public class UnauthorizedException : ServerException
+public class UnauthorizedException(
+    string message,
+    ErrorCodes code = ErrorCodes.Unknown) : ServerException(HttpStatusCode.Unauthorized, message, code)
 {
-    public UnauthorizedException(string message, ErrorCodes code = ErrorCodes.Unknown) : base(HttpStatusCode.Unauthorized, message, code)
-    {
-    }
 }
 
-public class NotFoundException : ServerException
+public class NotFoundException(
+    string message,
+    ErrorCodes code = ErrorCodes.Unknown) : ServerException(HttpStatusCode.NotFound, message, code)
 {
-    public NotFoundException(string message, ErrorCodes code = ErrorCodes.Unknown) : base(HttpStatusCode.NotFound, message, code)
-    {
-    }
 }
 
-public class ServiceUnavailableException : ServerException
+public class ServiceUnavailableException(
+    string message,
+    ErrorCodes code = ErrorCodes.Unknown) : ServerException(HttpStatusCode.ServiceUnavailable, message, code)
 {
-    public ServiceUnavailableException(string message, ErrorCodes code = ErrorCodes.Unknown) : base(HttpStatusCode.ServiceUnavailable, message, code)
-    {
-    }
 }
 
-public class ConflictException : ServerException
+public class ConflictException(
+    string message,
+    ErrorCodes code = ErrorCodes.Unknown) : ServerException(HttpStatusCode.Conflict, message, code)
 {
-    public ConflictException(string message, ErrorCodes code = ErrorCodes.Unknown) : base(HttpStatusCode.Conflict, message, code)
-    {
-    }
 }

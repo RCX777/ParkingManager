@@ -1,13 +1,10 @@
 ﻿using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using ParkingManager.Infrastructure.Configurations;
 using ParkingManager.Infrastructure.Database;
 using System.Text.Json.Serialization;
 using System.Text.Json;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
@@ -46,12 +43,8 @@ public static class WebApplicationBuilderExtensions
     /// </summary>
     public static WebApplicationBuilder AddCorsConfiguration(this WebApplicationBuilder builder)
     {
-        var corsConfiguration = builder.Configuration.GetRequiredSection(nameof(CorsConfiguration)).Get<CorsConfiguration>();
-
-        if (corsConfiguration == null)
-        {
-            throw new ApplicationException("The CORS configuration needs to be set!");
-        }
+        var corsConfiguration = builder.Configuration.GetRequiredSection(nameof(CorsConfiguration)).Get<CorsConfiguration>()
+            ?? throw new ApplicationException("The CORS configuration needs to be set!");
 
         builder.Services.AddCors(options =>
         {
@@ -106,12 +99,9 @@ public static class WebApplicationBuilderExtensions
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                var jwtConfiguration = builder.Configuration.GetSection(nameof(JwtConfiguration)).Get<JwtConfiguration>(); // Here we use the JWT configuration from the application.json.
-
-                if (jwtConfiguration == null)
-                {
-                    throw new ApplicationException("The JWT configuration needs to be set!");
-                }
+                // Here we use the JWT configuration from the application.json.
+                var jwtConfiguration = builder.Configuration.GetSection(nameof(JwtConfiguration)).Get<JwtConfiguration>()
+                    ?? throw new ApplicationException("The JWT configuration needs to be set!");
 
                 var key = Encoding.ASCII.GetBytes(jwtConfiguration.Key); // Use configured key to verify the JWT signature.
                 options.TokenValidationParameters = new()
@@ -127,10 +117,8 @@ public static class WebApplicationBuilderExtensions
                 options.RequireHttpsMetadata = false;
                 options.IncludeErrorDetails = true;
             }).Services
-            .AddAuthorization(options =>
-            {
-                options.DefaultPolicy = new AuthorizationPolicyBuilder().AddDefaultPolicy().Build(); // Adds the default policy for the JWT claims.
-            });
+            .AddAuthorizationBuilder()
+            .SetDefaultPolicy(new AuthorizationPolicyBuilder().AddDefaultPolicy().Build());
 
         return builder;
     }
