@@ -23,4 +23,10 @@ public class AuthorizationController(IUserService userService) : BaseResponseCon
     {
         return FromServiceResponse(await userService.Login(login with { Password = PasswordUtils.HashPassword(login.Password)})); // The "with" keyword works only with records and it creates another object instance with the updated properties.
     }
+
+    [HttpPost]
+    public async Task<ActionResult<RequestResponse<LoginResponseDTO>>> Register([FromBody] RegisterDTO register)
+    {
+        return FromServiceResponse(await userService.Register(register with { Password = PasswordUtils.HashPassword(register.Password) }));
+    }
 }

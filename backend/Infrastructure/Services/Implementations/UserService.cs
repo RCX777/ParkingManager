@@ -65,6 +65,52 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
         });
     }
 
+    public async Task<ServiceResponse<LoginResponseDTO>> Register(RegisterDTO register, CancellationToken cancellationToken = default)
+    {
+        var result = await repository.GetAsync(new UserSpec(register.Email), cancellationToken);
+
+        if (result != null) // Verify if the user is found in the database.
+        {
+            return ServiceResponse.FromError<LoginResponseDTO>(new(HttpStatusCode.Conflict, "The user already exists!", ErrorCodes.UserAlreadyExists));
+        }
+
+        if (!new EmailAddressAttribute().IsValid(register.Email)) // Verify if the email is valid.
+        {
+            return ServiceResponse.FromError<LoginResponseDTO>(new(HttpStatusCode.BadRequest, "The email is not valid!", ErrorCodes.InvalidEmail));
+        }
+
+        var user = new User
+        {
+            Email = register.Email,
+            Name = register.Name,
+            Role = UserRoleEnum.Client,
+            Password = register.Password
+        };
+
+        await repository.AddAsync(user, cancellationToken); // A new entity is created and persisted in the database.
+
+        var userDTO = new UserDTO
+        {
+            Id = user.Id,
+            Email = user.Email,
+            Name = user.Name,
+            Role = user.Role
+        };
+
+        var emailResult = await mailService.SendMail(register.Email, "Welcome to ParkingManager!", MailTemplates.UserAddTemplate(register.Name), true, "ParkingManager App", cancellationToken); // You can send a notification on the user email. Change the email if you want.
+
+        if (emailResult == null) // Verify if the email was sent.
+        {
+            return ServiceResponse.FromError<LoginResponseDTO>(new(HttpStatusCode.InternalServerError, "The email could not be sent!", ErrorCodes.EmailNotSent));
+        }
+
+        return ServiceResponse.ForSuccess(new LoginResponseDTO
+        {
+            User = userDTO,
+            Token = loginService.GetToken(userDTO, DateTime.UtcNow, new(7, 0, 0, 0))
+        });
+    }
+
     public async Task<ServiceResponse<int>> GetUserCount(CancellationToken cancellationToken = default) =>
         ServiceResponse.ForSuccess(await repository.GetCountAsync<User>(cancellationToken)); // Get the count of all user entities in the database.
 
@@ -95,7 +141,7 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
             Password = user.Password
         }, cancellationToken); // A new entity is created and persisted in the database.
 
-        await mailService.SendMail(user.Email, "Welcome!", MailTemplates.UserAddTemplate(user.Name), true, "My App", cancellationToken); // You can send a notification on the user email. Change the email if you want.
+        await mailService.SendMail(user.Email, "Welcome!", MailTemplates.UserAddTemplate(user.Name), true, "ParkingManager App", cancellationToken); // You can send a notification on the user email. Change the email if you want.
 
         return ServiceResponse.ForSuccess();
     }
