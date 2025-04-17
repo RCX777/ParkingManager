@@ -36,5 +36,19 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired();
         builder.Property(e => e.UpdatedAt)
             .IsRequired();
+
+        builder.HasMany(e => e.ParkingComplexes) // This specifies a many-to-many relation.
+            .WithMany(e => e.Admins) // This provides the reverse mapping for the many-to-many relation.
+            .UsingEntity(j => j.ToTable("ParkingComplexAdmins")); // This specifies the join table name.
+
+        builder.HasMany(e => e.Comments)  // This specifies a one-to-many relation
+            .WithOne(e => e.User) // This provides the reverse mapping for the one-to-many relation.
+            .HasForeignKey(e => e.UserId) // Here the foreign key column is specified.
+            .OnDelete(DeleteBehavior.Cascade); // This specifies the delete behavior when the referenced entity is removed.
+
+        builder.HasMany(e => e.ParkingSpaces)  // This specifies a one-to-many relation
+            .WithOne(e => e.User) // This provides the reverse mapping for the one-to-many relation.
+            .HasForeignKey(e => e.UserId) // Here the foreign key column is specified.
+            .OnDelete(DeleteBehavior.Cascade); // This specifies the delete behavior when the referenced entity is removed.
     }
 }

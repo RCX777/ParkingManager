@@ -16,8 +16,8 @@ stop:
 
 clean: stop
 	rm -rf \
-		.db_data \
 		backend/bin backend/obj \
 		backend/Migrations \
-		backend/TempDocuments
+		backend/TempDocuments \
+		.db_data \
 

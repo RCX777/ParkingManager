@@ -83,7 +83,7 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
         {
             Email = register.Email,
             Name = register.Name,
-            Role = UserRoleEnum.Client,
+            Role = UserRoleEnum.User,
             Password = register.Password
         };
 

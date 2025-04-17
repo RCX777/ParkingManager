@@ -12,4 +12,8 @@ public class UserDTO
     public string Name { get; set; } = null!;
     public string Email { get; set; } = null!;
     public UserRoleEnum Role { get; set; }
+
+    public ICollection<ParkingSpaceDTO> ParkingSpaces { get; set; } = null!;
+    public ICollection<CommentDTO> Comments { get; set; } = null!;
+    public ICollection<ParkingComplexDTO> ParkingComplexes { get; set; } = null!;
 }

@@ -21,8 +21,34 @@ public sealed class UserProjectionSpec : Specification<User, UserDTO>
             Id = e.Id,
             Email = e.Email,
             Name = e.Name,
-            Role = e.Role
+            Role = e.Role,
+            ParkingSpaces = e.ParkingSpaces.Select(ps => new ParkingSpaceDTO
+            {
+                Id = ps.Id,
+                ParkingComplexId = ps.ParkingComplexId,
+                Availabilities = ps.Availabilities.Select(a => new ParkingAvailabilityDTO
+                {
+                    Id = a.Id,
+                    StartDate = a.StartDate,
+                    EndDate = a.EndDate,
+                }).ToList(),
+            }).ToList(),
+            ParkingComplexes = e.ParkingComplexes.Select(pc => new ParkingComplexDTO
+            {
+                Id = pc.Id,
+                Name = pc.Name,
+                Address = pc.Address,
+            }).ToList(),
+            Comments = e.Comments.Select(c => new CommentDTO
+            {
+                Id = c.Id,
+                Text = c.Text,
+                CreatedAt = c.CreatedAt,
+            }).ToList(),
         })
+        .Include(e => e.ParkingSpaces)
+        .Include(e => e.ParkingComplexes)
+        .Include(e => e.Comments)
         .OrderByDescending(x => x.CreatedAt, orderByCreatedAt);
 
     public UserProjectionSpec(Guid id) : this() => Query.Where(e => e.Id == id); // This constructor will call the first declared constructor with the default parameter.
@@ -39,6 +65,6 @@ public sealed class UserProjectionSpec : Specification<User, UserDTO>
         var searchExpr = $"%{search.Replace(" ", "%")}%";
 
         Query.Where(e => EF.Functions.ILike(e.Name, searchExpr)); // This is an example on how database specific expressions can be used via C# expressions.
-                                                                                          // Note that this will be translated to the database something like "where user.Name ilike '%str%'".
+                                                                  // Note that this will be translated to the database something like "where user.Name ilike '%str%'".
     }
 }

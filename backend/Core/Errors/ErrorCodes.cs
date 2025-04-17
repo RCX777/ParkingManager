@@ -19,5 +19,7 @@ public enum ErrorCodes
     CannotDelete,
     MailSendFailed,
     InvalidEmail,
-    EmailNotSent
+    EmailNotSent,
+    UserNotAdmin,
+    UserNotOwner,
 }

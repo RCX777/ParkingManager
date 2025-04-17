@@ -18,4 +18,12 @@ public class User : BaseEntity
     /// Note that this field will be null if not explicitly requested via a Include query, also note that the property is used by the ORM, in the database this collection doesn't exist.
     /// </summary>
     public ICollection<UserFile> UserFiles { get; set; } = null!;
+
+    public ICollection<ParkingSpace> ParkingSpaces { get; set; } = null!;
+    public ICollection<Comment> Comments { get; set; } = null!;
+
+    /// <summary>
+    /// This is a Many-To-Many relation, the parking complex can have multiple admins and the user can be admin of multiple parking complexes.
+    /// </summary>
+    public ICollection<ParkingComplex> ParkingComplexes { get; set; } = null!;
 }
